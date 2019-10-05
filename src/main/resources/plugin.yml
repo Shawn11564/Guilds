@@ -1,0 +1,9 @@
+name: Guilds
+version: ${project.version}
+main: dev.mrshawn.guilds.Guilds
+api-version: 1.13
+prefix: Guilds
+authors: [MrShawn]
+website: https://mrshawn.dev/
+depend:
+  - Vault

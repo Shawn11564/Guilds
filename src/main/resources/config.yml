@@ -1,0 +1,75 @@
+# How much land can a guild claim in total
+max-land-per-guild: 20
+
+# Land purchase costs ( The line number corresponds to what each level costs )
+land-buy-cost:
+  - 1.0
+  - 2.0
+  - 3.0
+  - 4.0
+  - 5.0
+  - 6.0
+  - 7.0
+  - 8.0
+  - 9.0
+  - 10.0
+  - 11.0
+  - 12.0
+  - 13.0
+  - 14.0
+  - 15.0
+  - 16.0
+  - 17.0
+  - 18.0
+  - 19.0
+  - 20.0
+
+# Messages
+
+# General
+entered-guild-land: "&aYou have entered the land of &6%guild%&a!"
+left-guild-land: "&cYou have left the land of &6%guild%&c!"
+global-guild-disbanded: "&6%player% &ahas disbanded the guild &b%guild%&a!"
+bank-balance: "&aYour current guild's balance is: &6$%guild-balance%"
+
+# /guild help
+help-message:
+  - "&7&m-------- &8[ &aGuilds &8] &7&m--------"
+  - "&a/guild create <name> &7- &2Create a new guild"
+  - "&a/guild claim &7- &2Claim the chunk you are in"
+  - "&a/guild unclaim &7- &2Unclaim the chunk you are in"
+  - "&a/guild invite <player> &7- &2Invite a player to your guild"
+  - "&a/guild join <name> &7- &2Join a guild"
+  - "&a/guild promote <player> &7- &2Promote a player in your guild"
+  - "&a/guild demote <player> &7- &2Demote a player in your guild"
+  - "&a/guild chat [<g / p>] &7- &2Swap your chat between guild-only and public"
+  - "&a/guild bank <view / deposit / withdraw> &7- &2Take or put money in your guild's bank"
+  - "&a/guild tax <pay / view> &7- &2Pay or view your guild's taxes"
+  - "&a/guild rename <new name> &7- &2Rename your guild"
+
+# Confirmation messages
+created-guild: "&aYou have successfully created the guild: &b%guild-name%"
+disbanded-guild: "&aYou have disbanded your guild!"
+claimed-land: "&aYou have successfully claimed this chunk for your guild!"
+unclaimed-land: "&aYou have successfully unclaimed this chunk!"
+money-deposited: "&aYou have deposited &6$%amount% &ainto your guild's bank!"
+money-withdrawn: "&aYou have withdrawn &6$%amount% &afrom your guild's bank!"
+
+# Error messages
+already-in-guild: "&cYou can't do this because you are already in a guild!"
+not-in-guild: "&cYou must join a guild before doing this!"
+need-higher-guild-rank: "&cYou need a higher guild rank to do this!"
+not-claimable-region: "&cThis area doesn't allow land claiming!"
+chunk-not-connected: "&cYou can't claim this chunk because it isn't connected to your claimed land!"
+chunk-would-disconnect-land: "&cYou can't unclaim this chunk because it would disconnect too many chunks!"
+chunk-already-owned: "&cYou can't claim this chunk because your guild already owns it!"
+chunk-not-owned: "&cYou can't unclaim this chunk because your guild doesn't own it!"
+both-not-selected: "&cBoth selections aren't set, set them with &4/guild region wand&c!"
+need-selection-name: "&cYou need to enter a name for your selection!"
+selection-with-name-already-exists: "&cThere is already a region with that name!"
+cannot-claim-more-chunks: "&cYour guild can't claim any more land!"
+guild-cannot-afford-claim: "&cYour guild can't afford to claim anymore land, deposit some money into your guild balance!"
+cannot-afford-bank-deposit: "&cYou can't afford to deposit this much into your guild bank!"
+bank-cannot-afford-payout: "&cYour guild can't afford to give you this money!"
+no-permission: "&cYou do not have permission to use this command!"
+must-be-player: "&cYou must be a player to use this command!"
