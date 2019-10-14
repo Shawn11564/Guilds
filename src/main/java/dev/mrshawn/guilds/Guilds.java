@@ -2,27 +2,25 @@ package dev.mrshawn.guilds;
 
 import co.aikar.commands.PaperCommandManager;
 import dev.mrshawn.guilds.commands.GuildCMD;
-import dev.mrshawn.guilds.events.listeners.ChunkEnterEvent;
-import dev.mrshawn.guilds.events.listeners.LandProtection;
-import dev.mrshawn.guilds.events.listeners.MoveEvent;
-import dev.mrshawn.guilds.events.listeners.Wand;
+import dev.mrshawn.guilds.events.listeners.*;
 import dev.mrshawn.guilds.files.guilds.GuildFileManager;
 import dev.mrshawn.guilds.files.regions.RegionFileManager;
 import dev.mrshawn.guilds.files.regions.SelectionManager;
 import dev.mrshawn.guilds.guilds.Guild;
-import dev.mrshawn.guilds.guilds.managers.GuildManager;
-import dev.mrshawn.guilds.guilds.managers.LandManager;
+import dev.mrshawn.guilds.guilds.managers.*;
 import dev.mrshawn.guilds.guilds.regions.RegionManager;
 import dev.mrshawn.guilds.protections.ProtectionManager;
 import dev.mrshawn.guilds.utils.Chat;
 import lombok.Getter;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 @Getter
@@ -37,7 +35,12 @@ public final class Guilds extends JavaPlugin {
 	private RegionManager regionManager;
 	private SelectionManager selectionManager;
 	private ProtectionManager protectionManager;
+	private TaxManager taxManager;
+	private RaidingManager raidingManager;
+	private ChatManager chatManager;
 	private List<Double> landCosts;
+	private List<Double> taxCosts;
+	private List<Material> placeableMaterials;
 
 	@Override
 	public void onEnable() {
@@ -50,6 +53,7 @@ public final class Guilds extends JavaPlugin {
 			guildFileManager.save(guild);
 		}
 		regionFileManager.save();
+		raidingManager.setRaidTime(false);
 	}
 
 	public void setup() {
@@ -69,8 +73,15 @@ public final class Guilds extends JavaPlugin {
 		regionFileManager = new RegionFileManager(this);
 		selectionManager = new SelectionManager();
 		protectionManager = new ProtectionManager(this);
+		taxManager = new TaxManager(this);
+		raidingManager = new RaidingManager(this);
+		chatManager = new ChatManager(this);
 		landCosts = new ArrayList<>();
 		landCosts.addAll(getConfig().getDoubleList("land-buy-cost"));
+		taxCosts = new ArrayList<>();
+		taxCosts.addAll(getConfig().getDoubleList("tax-land-cost"));
+		placeableMaterials = new ArrayList<>();
+		placeableMaterials.addAll((Collection<? extends Material>) getConfig().getList("placeable-blocks"));
 		registerCommands();
 		registerEvents();
 	}
@@ -86,6 +97,8 @@ public final class Guilds extends JavaPlugin {
 		pm.registerEvents(new ChunkEnterEvent(), this);
 		pm.registerEvents(new Wand(this), this);
 		pm.registerEvents(new LandProtection(this), this);
+		pm.registerEvents(new JoinLeave(this), this);
+		pm.registerEvents(new GuildChat(), this);
 	}
 
 	public static Guilds getInstance() {

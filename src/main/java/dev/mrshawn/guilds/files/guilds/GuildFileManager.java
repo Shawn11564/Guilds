@@ -42,6 +42,8 @@ public class GuildFileManager {
 			UUID uuid = UUID.fromString(Objects.requireNonNull(config.getString("uuid")));
 			int maxLand = config.getInt("max-land");
 			double bankBalance = config.getDouble("bank-balance");
+			double owedTaxes = config.getDouble("owed-taxes");
+			int missedCycles = config.getInt("missed-cycles");
 			Map<UUID, RankType> members = new HashMap<>();
 			for (String s : config.getStringList("members.leaders")) {
 				members.put(UUID.fromString(s), RankType.LEADER);
@@ -62,7 +64,7 @@ public class GuildFileManager {
 					chunks.add(world.getChunkAt(x, y));
 				}
 			}
-			Guild guild = new Guild(name, members, chunks, uuid, bankBalance, maxLand);
+			Guild guild = new Guild(name, members, chunks, uuid, bankBalance, maxLand, owedTaxes, missedCycles);
 			Guilds.getInstance().getGuildManager().addGuild(guild);
 			guildFiles.put(guild, config);
 		}
@@ -83,6 +85,8 @@ public class GuildFileManager {
 			config.set("uuid", guild.getUuid().toString());
 			config.set("max-land", guild.getMaxLand());
 			config.set("bank-balance", guild.getBankBalance());
+			config.set("owed-taxes", guild.getOwedTaxes());
+			config.set("missed-cycles", guild.getMissedCycles());
 			config.set("members.leaders", guild.getLeaders());
 			config.set("members.coleaders", guild.getCoLeaders());
 			config.set("members.members", guild.getRegularMembers());

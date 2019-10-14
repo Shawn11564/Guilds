@@ -1,5 +1,14 @@
+# To claim regions, do the following:
+# 1. /guild admin regions wand ( Get a region claiming wand )
+# 2. Select 2 points with the wand ( Left-Click = Point 1 Right-Click = Point 2 )
+# 3. /guild admin regions save <name> ( Save the region to data with the given name )
+# NOTE: If you ever want to remove a region, type /guild regions remove <name>
+
 # How much land can a guild claim in total
 max-land-per-guild: 20
+
+# What time zone to run in?
+time-zone: "America/New_York"
 
 # Land purchase costs ( The line number corresponds to what each level costs )
 land-buy-cost:
@@ -24,6 +33,45 @@ land-buy-cost:
   - 19.0
   - 20.0
 
+# Taxes
+
+# What time should the tax calculator run? Format: hh,mm (NOTE: Uses 24-hour time!)
+run-time: "12:30"
+# How many cycles can a guild go with >0 taxes before being disbanded?
+max-cycles: 3
+# Per-Land tax amount ( How much should the guild be taxed when the loop runs? ) The line number corresponds to the amount of land owned
+tax-land-cost:
+  - 1000.0
+  - 2000.0
+  - 3000.0
+  - 4000.0
+  - 5000.0
+  - 6000.0
+  - 7000.0
+  - 8000.0
+  - 9000.0
+  - 10000.0
+  - 11000.0
+  - 12000.0
+  - 13000.0
+  - 14000.0
+  - 15000.0
+  - 16000.0
+  - 17000.0
+  - 18000.0
+  - 19000.0
+  - 20000.0
+
+# Raiding
+
+# What time should the raiding scheduler run? Format: hh,mm (NOTE: Uses 24-hour time!)
+raiding-run-time: "12:30"
+# How long should the raid time last in minutes?
+raiding-duration: 120
+# What blocks should be placeable during raiding time?
+placeable-blocks:
+  - "SCAFFOLDING"
+
 # Messages
 
 # General
@@ -31,6 +79,7 @@ entered-guild-land: "&aYou have entered the land of &6%guild%&a!"
 left-guild-land: "&cYou have left the land of &6%guild%&c!"
 global-guild-disbanded: "&6%player% &ahas disbanded the guild &b%guild%&a!"
 bank-balance: "&aYour current guild's balance is: &6$%guild-balance%"
+guild-chat: "&f[&bGC&f] &r%player% &7%message%"
 
 # /guild help
 help-message:
@@ -39,11 +88,11 @@ help-message:
   - "&a/guild claim &7- &2Claim the chunk you are in"
   - "&a/guild unclaim &7- &2Unclaim the chunk you are in"
   - "&a/guild invite <player> &7- &2Invite a player to your guild"
+  - "&a/guild kick <player> &7- &2Kick a player from your guild"
   - "&a/guild join <name> &7- &2Join a guild"
   - "&a/guild promote <player> &7- &2Promote a player in your guild"
   - "&a/guild demote <player> &7- &2Demote a player in your guild"
   - "&a/guild chat [<g / p>] &7- &2Swap your chat between guild-only and public"
-  - "&a/guild bank <view / deposit / withdraw> &7- &2Take or put money in your guild's bank"
   - "&a/guild tax <pay / view> &7- &2Pay or view your guild's taxes"
   - "&a/guild rename <new name> &7- &2Rename your guild"
 

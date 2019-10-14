@@ -6,6 +6,7 @@ import dev.mrshawn.guilds.utils.Config;
 import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.Chunk;
+import org.bukkit.entity.Player;
 
 import java.io.File;
 import java.text.DecimalFormat;
@@ -20,9 +21,13 @@ public class Guild {
 
 	private String name;
 	private Map<UUID, RankType> members;
+	private List<Player> onlineMembers;
 	private List<Chunk> chunkList;
+	private List<Player> invitedMembers;
 	private UUID uuid;
 	private double bankBalance;
+	private double owedTaxes;
+	private int missedCycles;
 	private int maxLand;
 	private File file;
 
@@ -31,24 +36,27 @@ public class Guild {
 		this.members = members;
 		this.uuid = uuid;
 		chunkList = new ArrayList<>();
+		onlineMembers = new ArrayList<>();
+		invitedMembers = new ArrayList<>();
 		bankBalance = 0;
 		maxLand = Config.getMaxLandClaimable();
 		file = new File(Guilds.getInstance().getDataFolder() + File.separator + "Guilds" + File.separator + getUuid() + ".yml");
 	}
 
-	public Guild(String name, Map<UUID, RankType> members, List<Chunk> chunkList, UUID uuid, double bankBalance, int maxLand) {
+	public Guild(String name, Map<UUID, RankType> members, List<Chunk> chunkList, UUID uuid, double bankBalance, int maxLand, double owedTaxes, int missedCycles) {
 		this.name = name;
 		this.members = members;
 		this.chunkList = chunkList;
 		this.uuid = uuid;
 		this.bankBalance = bankBalance;
 		this.maxLand = maxLand;
+		this.owedTaxes = owedTaxes;
+		this.missedCycles = missedCycles;
 		file = new File(Guilds.getInstance().getDataFolder() + File.separator + "Guilds" + File.separator + getUuid() + ".yml");
 	}
 
 	public boolean claimChunk(Chunk chunk) {
 		if (canAfford()) {
-			removeMoney(getNewLandCost());
 			chunkList.add(chunk);
 			List<String> chunkStrings = new ArrayList<>();
 			for (Chunk c : getChunkList()) {
@@ -75,6 +83,13 @@ public class Guild {
 		return Guilds.getInstance().getLandCosts().get(chunkList.size());
 	}
 
+	public double getNewTaxCost() {
+		if (chunkList.size() == 0) {
+			return Guilds.getInstance().getTaxCosts().get(0);
+		}
+		return Guilds.getInstance().getTaxCosts().get(chunkList.size());
+	}
+
 	public void addMoney(double amount) {
 		bankBalance += amount;
 		Guilds.getInstance().getGuildFileManager().modify(this, "bank-balance", Guilds.getInstance().getGuildFileManager().getGuildFiles().get(this).getDouble("bank-balance") + amount);
@@ -88,6 +103,11 @@ public class Guild {
 	public String getBankBalanceFormatted() {
 		DecimalFormat df = new DecimalFormat("##.00");
 		return df.format(bankBalance);
+	}
+
+	public String getTaxOwedFormatted() {
+		DecimalFormat df = new DecimalFormat("##.00");
+		return df.format(owedTaxes);
 	}
 
 	public boolean isChunkConnected(Chunk chunk) {
@@ -155,6 +175,10 @@ public class Guild {
 			}
 		}
 		return temp;
+	}
+
+	public void invite(Player player) {
+		invitedMembers.add(player);
 	}
 
 	public void delete() {

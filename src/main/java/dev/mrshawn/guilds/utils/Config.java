@@ -130,4 +130,8 @@ public class Config {
 		return config.getString("not-claimable-region");
 	}
 
+	public static String getGuildChatFormatted(Player player, String message) {
+		return config.getString("guild-chat").replace("%player%", player.getDisplayName()).replace("%message%", message);
+	}
+
 }

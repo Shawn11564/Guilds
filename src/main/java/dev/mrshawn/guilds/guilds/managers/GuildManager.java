@@ -90,4 +90,15 @@ public class GuildManager {
 		}
 		return null;
 	}
+
+	public Guild isInvitedToGuild(Player player, String name) {
+		for (Guild guild : guilds) {
+			if (guild.getName().equalsIgnoreCase(name)) {
+				if (guild.getInvitedMembers().contains(player)) {
+					return guild;
+				}
+			}
+		}
+		return null;
+	}
 }

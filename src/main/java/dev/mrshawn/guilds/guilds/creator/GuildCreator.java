@@ -22,8 +22,8 @@ public class GuildCreator {
 		Guilds.getInstance().getGuildFileManager().store(Guilds.getInstance().getGuildManager().getGuildByName(name));
 	}
 
-	public GuildCreator(String name, Map<UUID, RankType> members, List<Chunk> chunkList, UUID uuid, double bankBalance, int maxLand) {
-		Guilds.getInstance().getGuildManager().addGuild(new Guild(name, members, chunkList, uuid, bankBalance, maxLand));
+	public GuildCreator(String name, Map<UUID, RankType> members, List<Chunk> chunkList, UUID uuid, double bankBalance, int maxLand, double taxesOwed, int missedCycles) {
+		Guilds.getInstance().getGuildManager().addGuild(new Guild(name, members, chunkList, uuid, bankBalance, maxLand, taxesOwed, missedCycles));
 	}
 
 }

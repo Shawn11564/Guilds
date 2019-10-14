@@ -8,6 +8,7 @@ import dev.mrshawn.guilds.protections.DispenserArrow;
 import dev.mrshawn.guilds.protections.ProtectionManager;
 import dev.mrshawn.guilds.utils.Chat;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
@@ -41,14 +42,18 @@ public class LandProtection implements Listener {
 		Player player = e.getPlayer();
 		Location location = e.getBlock().getLocation();
 		if (guildManager.inGuildLand(location)) {
-			Guild guild = guildManager.getGuildByLocation(location);
-			if (guildManager.getPlayerGuild(player) != guild) {
-				e.setCancelled(true);
-				Chat.tell(player, "&cYou can't break blocks in other guild's land!");
+			if (!main.getRaidingManager().isRaidTime()) {
+				Guild guild = guildManager.getGuildByLocation(location);
+				if (guildManager.getPlayerGuild(player) != guild || player.hasPermission("guilds.bypass")) {
+					e.setCancelled(true);
+					Chat.tell(player, "&cYou can't break blocks in other guild's land!");
+				}
 			}
 		} else {
-			e.setCancelled(true);
-			Chat.tell(player, "&cYou can't break blocks here!");
+			if (!player.hasPermission("guilds.bypass")) {
+				e.setCancelled(true);
+				Chat.tell(player, "&cYou can't break blocks here!");
+			}
 		}
 	}
 
@@ -57,31 +62,43 @@ public class LandProtection implements Listener {
 		Player player = e.getPlayer();
 		Location location = e.getBlockPlaced().getLocation();
 		if (guildManager.inGuildLand(location)) {
-			Guild guild = guildManager.getGuildByLocation(location);
-			if (guildManager.getPlayerGuild(player) != guild) {
-				e.setCancelled(true);
-				Chat.tell(player, "&cYou can't place blocks in other guild's land!");
+			if (!main.getRaidingManager().isRaidTime()) {
+				Guild guild = guildManager.getGuildByLocation(location);
+				if (guildManager.getPlayerGuild(player) != guild || player.hasPermission("guilds.bypass")) {
+					e.setCancelled(true);
+					Chat.tell(player, "&cYou can't place blocks in other guild's land!");
+				}
+			} else {
+				if (main.getPlaceableMaterials().contains(e.getBlockPlaced().getType())) {
+					main.getRaidingManager().getPlaceBlocks().put(e.getBlockPlaced(), Material.AIR);
+				} else {
+					Chat.tell(player, "&cYou can't place this block during raid time!");
+				}
 			}
 		} else {
-			e.setCancelled(true);
-			Chat.tell(player, "&cYou can't place blocks here!");
+			if (!player.hasPermission("guilds.bypass")) {
+				e.setCancelled(true);
+				Chat.tell(player, "&cYou can't place blocks here!");
+			}
 		}
+
 	}
 
 	@EventHandler
 	public void onContainerOpen(PlayerInteractEvent e) {
 		Player player = e.getPlayer();
-		if (e.getAction() == Action.RIGHT_CLICK_BLOCK) {
-			Location location = Objects.requireNonNull(e.getClickedBlock()).getLocation();
-			if (guildManager.inGuildLand(location)) {
-				Guild guild = guildManager.getGuildByLocation(location);
-				if (guildManager.getPlayerGuild(player) != guild) {
+		if (!main.getRaidingManager().isRaidTime()) {
+			if (e.getAction() == Action.RIGHT_CLICK_BLOCK && !player.hasPermission("guilds.bypass")) {
+				Location location = Objects.requireNonNull(e.getClickedBlock()).getLocation();
+				if (guildManager.inGuildLand(location)) {
+					Guild guild = guildManager.getGuildByLocation(location);
+					if (guildManager.getPlayerGuild(player) != guild && !player.hasPermission("guilds.bypass")) {
+						e.setCancelled(true);
+						Chat.tell(player, "&cYou can't interact in other guild's land!");
+					}
+				} else {
 					e.setCancelled(true);
-					Chat.tell(player, "&cYou can't interact in other guild's land!");
 				}
-			} else {
-				e.setCancelled(true);
-				Chat.tell(player, "&cYou can't interact here!");
 			}
 		}
 	}
